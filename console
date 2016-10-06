@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+	//register vendor autoloader
+	require __DIR__ . '/vendor/autoload.php';
+
+    // set to run indefinitely if needed
+    set_time_limit(0);
+	ini_set('display_errors', true);
+    ini_set('memory_limit','1024M');
+
+    // import the Symfony Console Application
+    use Symfony\Component\Console\Application;
+
+    $app = new Application();
+
+    // automagically attach all commands in the console folder
+    $commandRoot = 'src/commands/';
+    $commands    = glob($commandRoot.'*Command.class.php');
+    foreach($commands as $command){
+        //first include the file
+        include_once $command;
+
+        //then figure out the full name
+        $commandName = str_replace(array($commandRoot, '.class.php'),'',$command);
+        $app->add( new $commandName( ) );
+    }
+
+    //and start it maaaan
+    $app->setName( 'Stress Test Wrapper' );
+    $app->setVersion( '0.1 alpha' );
+    $app->run();

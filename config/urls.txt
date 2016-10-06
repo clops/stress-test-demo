@@ -1,0 +1,3 @@
+# These are the URLs to stress test
+https://booksusi.com
+https://booksusi.com/new/

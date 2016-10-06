@@ -1,0 +1,17 @@
+{
+    "name": "clops/stress-test-demo",
+    "description": "Stress Test Demo",
+    "type": "project",
+    "license": "GNU",
+    "authors": [
+        {
+            "name": "Alexey Kulikov",
+            "email": "a.kulikov@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "^3.1",
+        "symfony/http-foundation": "^3.1",
+        "symfony/process": "^3.1"
+    }
+}
