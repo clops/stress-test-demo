@@ -24,7 +24,7 @@
 		protected function configure() {
 			$this->setName("siege")
 				 ->setDescription("Stress Test the Application")
-				 ->addOption('generate',    'g', InputOption::VALUE_OPTIONAL, 'Full Update including all dependancies',     100)
+				 ->addOption('generate',    'g', InputOption::VALUE_OPTIONAL, 'Amount of test data to generate',            100)
 				 ->addOption('concurrent',  'c', InputOption::VALUE_OPTIONAL, 'Number of concurrent threads to run',        10)
 				 ->addOption('repetitions', 'r', InputOption::VALUE_OPTIONAL, 'Number of repetitions per thread per URL',   10)
 			;

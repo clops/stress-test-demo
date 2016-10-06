@@ -29,7 +29,7 @@ Usage:
   siege [options]
 
 Options:
-  -g, --generate[=GENERATE]        Full Update including all dependancies [default: 100]
+  -g, --generate[=GENERATE]        Amount of test data to generate [default: 100]
   -c, --concurrent[=CONCURRENT]    Number of concurrent threads to run [default: 10]
   -r, --repetitions[=REPETITIONS]  Number of repetitions per thread per URL [default: 10]
   -h, --help                       Display this help message
