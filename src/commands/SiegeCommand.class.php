@@ -8,6 +8,7 @@
 	use Symfony\Component\Console\Input\InputOption;
 	use Symfony\Component\Console\Command\Command;
 	use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+	use Symfony\Component\Process\ProcessBuilder;
 
 	/**
 	 * Created by PhpStorm.
@@ -18,13 +19,14 @@
 	class SiegeCommand extends Command{
 
 		/**
-		 *
+		 * Setup command signature
 		 */
 		protected function configure() {
 			$this->setName("siege")
 				 ->setDescription("Stress Test the Application")
-				 //->addArgument('branch', InputArgument::OPTIONAL, 'Choose a specific branch to switch to if you want')
-				 ->addOption('generate', 'g', InputOption::VALUE_OPTIONAL, 'Full Update including all dependancies', 100)
+				 ->addOption('generate',    'g', InputOption::VALUE_OPTIONAL, 'Full Update including all dependancies',     100)
+				 ->addOption('concurrent',  'c', InputOption::VALUE_OPTIONAL, 'Number of concurrent threads to run',        10)
+				 ->addOption('repetitions', 'r', InputOption::VALUE_OPTIONAL, 'Number of repetitions per thread per URL',   10)
 			;
 		}
 
@@ -47,6 +49,9 @@
 
 			//and email test results to the admin if needed
 			$this->emailTestResults($input, $output);
+
+			//and finally some garbage collection
+			$this->garbageCollector($input, $output);
 
 			//fin
 			$output->writeln('Done! Thank you :)');
@@ -115,7 +120,29 @@
 			$output->writeln('');
 			$output->writeln('<header>Initiating Siege</header>');
 
-			$siege = new Process('siege');
+			$concurrent  = (int)$input->getOption('concurrent');
+			$repetitions = (int)$input->getOption('repetitions');
+
+			if($concurrent <= 0){
+				throw new Exception('Concurrent must be an integer larger than 0, '.$concurrent.' given');
+			}
+
+			if($repetitions <= 0){
+				throw new Exception('Repetitions must be an integer larger than 0, '.$repetitions.' given');
+			}
+
+			$builder = new ProcessBuilder(
+				array(
+					'siege',
+					'--rc=config/.siegerc',
+					'--file=config/urls.txt',
+					'--log=var/log/siege.log',
+					'--concurrent='.$concurrent,
+					'--reps='.$repetitions
+				)
+			);
+
+			$siege = $builder->getProcess();
 			$siege->setTimeout( 0 ); //unlimited
 
 			$siege->mustRun(
@@ -134,6 +161,19 @@
 		private function emailTestResults(InputInterface $input, OutputInterface $output){
 			$output->writeln('');
 			$output->writeln('<header>EMailing Test Results to Maintainer</header>');
+
+			//emailing results with an attachment
+			//@todo
+		}
+
+
+		/**
+		 * @param InputInterface  $input
+		 * @param OutputInterface $output
+		 */
+		private function garbageCollector(InputInterface $input, OutputInterface $output){
+			//collect garbage here, remove old log files, and anything else
+			//@todo
 		}
 
 	}
