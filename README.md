@@ -23,7 +23,8 @@ There are two configuration files located in `/config/` they are
 
 Usage is simple, and is limited to one console command
 
-`$ ./console help siege
+```
+$ ./console help siege
 Usage:
   siege [options]
 
@@ -40,7 +41,12 @@ Options:
   -v|vv|vvv, --verbose             Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Help:
-  Stress Test the Application`
+  Stress Test the Application
+```
+
+Example, will run siege with 1 concurrent user, 10 repetitions
+
+`./console siege -c 1 -r 10`
 
 ## Achtung
 This is experimental software which shall not be used in production
